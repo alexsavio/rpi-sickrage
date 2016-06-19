@@ -16,14 +16,14 @@ RUN mkdir ~/unrar-nonfree && \
     rm -r ~/unrar-nonfree
 
 ## Install Couchpotato
-RUN cd /opt && \
+RUN cd /sickrage && \
   git clone https://github.com/SickRage/SickRage.git
 
 ## Expose port
 EXPOSE 8081
 
 ## Set working directory
-WORKDIR /opt
+WORKDIR /sickrage
 
 ## Run Couchpotato
 ENTRYPOINT ["python", "SickRage/SickBeard.py"]
