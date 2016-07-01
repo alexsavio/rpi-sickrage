@@ -1,13 +1,15 @@
-# rpi-sickrage
+# Sickrage for Docker on Raspberry PI
 
 Dockerfile to set up a SickRate container, based on the Hypriot image
 
-## Build
-
-    docker build --tag qnm/rpi-sickrage git://github.com/qnm/rpi-sickrage.git
-
 ## Run
 
-    docker run -d -p 8081:8081 -v <LOCAL_MOVIES_FOLDER>:/movies --restart=always --name sickrage qnm/rpi-sickrage
+    docker run -d \
+        -p 8081:8081 \
+        -v /your/localfolder/with/media:/data \
+        -v /your/localfolder/to/store/configs:/config \
+        --restart=always \
+        --name sickrage \
+        yuriteixeira/rpi-sickrage
 
 
