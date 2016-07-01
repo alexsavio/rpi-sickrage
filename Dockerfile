@@ -1,11 +1,13 @@
 FROM hypriot/rpi-python
-MAINTAINER Rob Sharp <qnm@fea.st>
+MAINTAINER Yuri Teixeira <oyuriteixeira at gmail dot com>
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "deb-src http://archive.raspbian.org/raspbian wheezy main contrib non-free rpi" > /etc/apt/sources.list.d/debian-sources.list
 
-RUN apt-get update && \
-  apt-get install -y -q git-core python-lxml python-openssl
+# Dependencies
+RUN apt-get update \ 
+    && apt-get install -y -q git-core python-lxml python-openssl \ 
+    && apt-get -y autoremove && apt-get -y clean
 
 RUN mkdir ~/unrar-nonfree && \
     cd ~/unrar-nonfree && \
@@ -15,15 +17,12 @@ RUN mkdir ~/unrar-nonfree && \
     cd && \
     rm -r ~/unrar-nonfree
 
-## Install Couchpotato
-RUN cd /sickrage && \
-  git clone https://github.com/SickRage/SickRage.git
+## Install Sickrage
+RUN mkdir /sickrage && cd /sickrage && git clone https://github.com/SickRage/SickRage.git
 
 ## Expose port
 EXPOSE 8081
 
-## Set working directory
+## Run
 WORKDIR /sickrage
-
-## Run Couchpotato
-ENTRYPOINT ["python", "SickRage/SickBeard.py"]
+ENTRYPOINT ["python", "SickRage/SickBeard.py", "--datadir=/config"]
