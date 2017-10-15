@@ -1,12 +1,15 @@
-FROM hypriot/rpi-python
-MAINTAINER Yuri Teixeira <oyuriteixeira at gmail dot com>
+FROM resin/raspberry-pi2-python:2.7.13
+MAINTAINER Alexandre Savio
+
+# Enable systemd
+ENV INITSYSTEM on
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN echo "deb-src http://archive.raspbian.org/raspbian wheezy main contrib non-free rpi" > /etc/apt/sources.list.d/debian-sources.list
+RUN echo "deb-src http://archive.raspbian.org/raspbian jessie main contrib non-free rpi" > /etc/apt/sources.list.d/debian-sources.list
 
 # Dependencies
-RUN apt-get update \ 
-    && apt-get install -y -q git-core python-lxml python-openssl \ 
+RUN apt-get update \
+    && apt-get install -y -q git-core python-lxml python-openssl \
     && apt-get -y autoremove && apt-get -y clean
 
 RUN mkdir ~/unrar-nonfree && \
