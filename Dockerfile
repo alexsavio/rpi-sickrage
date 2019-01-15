@@ -9,10 +9,10 @@ RUN apk -U update && \
         py-lxml \
         nodejs \
     && \
-    git clone --depth 1 https://github.com/SickRage/SickRage.git /SickRage && \
+    git clone --depth 1 https://github.com/SickRage/SickRage.git /sickrage && \
     rm -rf /tmp/src && \
     rm -rf /var/cache/apk/*
 
 EXPOSE 8081
 
-ENTRYPOINT ["python", "/SickRage/SickBeard.py", "--datadir=/data/", "--config=/config/config.ini"]
+ENTRYPOINT ["python", "/sickrage/SiCKRAGE.py", "--datadir=/config/"]
