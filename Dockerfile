@@ -5,11 +5,13 @@ RUN apk -U update && \
     apk -U add \
         git \
         python \
+        py2-pip \
         py-openssl \
         py-lxml \
         nodejs \
     && \
     git clone --depth 1 https://github.com/SickRage/SickRage.git /sickrage && \
+    pip install -r /sickrage/requirements.txt && \
     rm -rf /tmp/src && \
     rm -rf /var/cache/apk/*
 
