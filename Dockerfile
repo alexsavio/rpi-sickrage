@@ -1,31 +1,18 @@
-FROM resin/raspberry-pi2-python:2.7.13
-MAINTAINER Alexandre Savio
+FROM hypriot/rpi-alpine:3.6
 
-# Enable systemd
-ENV INITSYSTEM on
+RUN apk -U update && \
+    apk -U upgrade && \
+    apk -U add \
+        git \
+        python \
+        py-openssl \
+        py-lxml \
+        nodejs \
+    && \
+    git clone --depth 1 https://github.com/SickRage/SickRage.git /SickRage && \
+    rm -rf /tmp/src && \
+    rm -rf /var/cache/apk/*
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN echo "deb-src http://archive.raspbian.org/raspbian jessie main contrib non-free rpi" > /etc/apt/sources.list.d/debian-sources.list
-
-# Dependencies
-RUN apt-get update \
-    && apt-get install -y -q git-core python-lxml python-openssl \
-    && apt-get -y autoremove && apt-get -y clean
-
-RUN mkdir ~/unrar-nonfree && \
-    cd ~/unrar-nonfree && \
-    apt-get build-dep -y unrar-nonfree && \
-    apt-get source -b -y unrar-nonfree && \
-    dpkg -i unrar*.deb && \
-    cd && \
-    rm -r ~/unrar-nonfree
-
-## Install Sickrage
-RUN mkdir /sickrage && cd /sickrage && git clone https://github.com/SickRage/SickRage.git
-
-## Expose port
 EXPOSE 8081
 
-## Run
-WORKDIR /sickrage
-ENTRYPOINT ["python", "SickRage/SickBeard.py", "--datadir=/config"]
+ENTRYPOINT ["python", "/SickRage/SickBeard.py", "--datadir=/data/", "--config=/config/config.ini"]
