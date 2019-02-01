@@ -17,7 +17,7 @@ RUN apk -U update && \
         py-lxml \
         nodejs \
     && \
-    git clone --depth 1 https://github.com/SickRage/SickRage.git@9.4.57 /sickrage && \
+    git clone --branch 9.4.58 --depth 1 https://github.com/SickRage/SickRage.git /sickrage && \
     pip install -U pip setuptools && \
     pip install -r /sickrage/requirements.txt && \
     rm -rf /tmp/src && \
