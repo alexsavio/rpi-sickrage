@@ -1,4 +1,4 @@
-FROM hypriot/rpi-alpine:3.6
+FROM balenalib/rpi-alpine:3.8
 
 RUN apk -U update && \
     apk -U upgrade && \
@@ -17,7 +17,7 @@ RUN apk -U update && \
         py-lxml \
         nodejs \
     && \
-    git clone --branch 9.4.58 --depth 1 https://github.com/SickRage/SickRage.git /sickrage && \
+    git clone --depth 1 https://github.com/SickRage/SickRage.git /sickrage && \
     pip install -U pip setuptools && \
     pip install -r /sickrage/requirements.txt && \
     rm -rf /tmp/src && \
