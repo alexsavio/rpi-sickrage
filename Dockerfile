@@ -1,31 +1,19 @@
-FROM resin/raspberry-pi2-python:2.7.13
-MAINTAINER Alexandre Savio
+FROM balenalib/rpi-alpine:3.10
 
-# Enable systemd
-ENV INITSYSTEM on
+ENV TZ 'Europe/Berlin'
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN echo "deb-src http://archive.raspbian.org/raspbian jessie main contrib non-free rpi" > /etc/apt/sources.list.d/debian-sources.list
+ENV SICKRAGE_VERSION 9.4.132
 
-# Dependencies
-RUN apt-get update \
-    && apt-get install -y -q git-core python-lxml python-openssl \
-    && apt-get -y autoremove && apt-get -y clean
-
-RUN mkdir ~/unrar-nonfree && \
-    cd ~/unrar-nonfree && \
-    apt-get build-dep -y unrar-nonfree && \
-    apt-get source -b -y unrar-nonfree && \
-    dpkg -i unrar*.deb && \
-    cd && \
-    rm -r ~/unrar-nonfree
-
-## Install Sickrage
-RUN mkdir /sickrage && cd /sickrage && git clone https://github.com/SickRage/SickRage.git
+RUN apk add --update --no-cache libffi-dev openssl-dev libxml2-dev libxslt-dev linux-headers build-base \
+    git tzdata unrar \
+    python3 python3-dev
+RUN git clone https://github.com/SiCKRAGE/SiCKRAGE.git -b ${SICKRAGE_VERSION} --depth 1 /opt/sickrage \
+    && cd /opt/sickrage; git checkout ${SICKRAGE_VERSION} \
+    && python3 -m pip install -U pip setuptools \
+    && python3 -m pip install -r /opt/sickrage/requirements.txt
 
 ## Expose port
 EXPOSE 8081
 
 ## Run
-WORKDIR /sickrage
-ENTRYPOINT ["python", "SickRage/SickBeard.py", "--datadir=/config"]
+ENTRYPOINT ["python3", "/opt/sickrage/SiCKRAGE.py", "--datadir=/config"]
