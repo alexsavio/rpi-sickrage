@@ -1,6 +1,6 @@
 FROM balenalib/rpi-alpine:3.11
 
-ARG SICKRAGE_VERSION
+ARG SICKRAGE_VERSION=9.4.201
 
 ENV TZ 'Europe/Berlin'
 
