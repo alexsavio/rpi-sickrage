@@ -1,30 +1,19 @@
-FROM balenalib/rpi-alpine:3.11
+FROM balenalib/rpi-alpine:3.10
 
-ARG version
+ENV TZ 'Europe/Berlin'
 
-RUN apk -U update && \
-    apk -U upgrade && \
-    apk -U add --no-cache \
-        libffi-dev \
-        openssl-dev \
-        libxml2-dev \
-        libxslt-dev \
-        linux-headers \
-        build-base \
-        python2-dev \
-        git \
-        python \
-        py2-pip \
-        py-openssl \
-        py-lxml \
-        nodejs \
-    && \
-    git clone --depth 1 https://github.com/SickRage/SickRage.git@@{version} /sickrage && \
-    pip install -U pip setuptools && \
-    pip install -r /sickrage/requirements.txt && \
-    rm -rf /tmp/src && \
-    rm -rf /var/cache/apk/*
+ARG SICKRAGE_VERSION 9.4.132
 
+RUN apk add --update --no-cache libffi-dev openssl-dev libxml2-dev libxslt-dev linux-headers build-base \
+    git tzdata unrar \
+    python3 python3-dev
+RUN git clone https://github.com/SiCKRAGE/SiCKRAGE.git -b ${SICKRAGE_VERSION} --depth 1 /opt/sickrage \
+    && cd /opt/sickrage; git checkout ${SICKRAGE_VERSION} \
+    && python3 -m pip install -U pip setuptools \
+    && python3 -m pip install -r /opt/sickrage/requirements.txt
+
+## Expose port
 EXPOSE 8081
 
-ENTRYPOINT ["python", "/sickrage/SiCKRAGE.py", "--datadir=/config/"]
+## Run
+ENTRYPOINT ["python3", "/opt/sickrage/SiCKRAGE.py", "--datadir=/config"]
