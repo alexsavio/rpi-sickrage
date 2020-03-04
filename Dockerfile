@@ -1,8 +1,8 @@
-FROM balenalib/rpi-alpine:3.10
+FROM balenalib/rpi-alpine:3.11
+
+ARG SICKRAGE_VERSION
 
 ENV TZ 'Europe/Berlin'
-
-ARG SICKRAGE_VERSION 9.4.132
 
 RUN apk add --update --no-cache libffi-dev openssl-dev libxml2-dev libxslt-dev linux-headers build-base \
     git tzdata unrar \
