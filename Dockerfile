@@ -1,4 +1,4 @@
-FROM balenalib/rpi-alpine:3.11
+FROM balenalib/rpi-alpine:3.10
 
 ARG SICKRAGE_VERSION=9.4.201
 
